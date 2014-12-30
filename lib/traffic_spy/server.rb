@@ -17,9 +17,20 @@ module TrafficSpy
       erb :index
     end
 
+    post '/sources' do
+      return 400 if params[:rootUrl].nil? || params[:identifier].nil?
+      URL.add_new(params[:rootUrl])
+      p Source.create(params[:identifier], URL.find_url(params[:rootUrl]).id)
+      puts tester
+      return 403 unless tester
+      200
+    end
+
     not_found do
       erb :error
     end
   end
+
+
 
 end
