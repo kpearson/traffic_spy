@@ -21,11 +21,9 @@ module TrafficSpy
     end
 
     post '/source' do
-      raise BadRequest if params[:rootUrl] == "" || params[:identifier] == ""
-      raise Forbidden if params[:identifier] == Source.find(:identifier)
+      raise BadRequest if params[:rootUrl].to_s.empty? || params[:identifier].to_s.empty?
       URL.add(params[:rootUrl])
-      Source.create(params[:identifier], URL.find(params[:rootUrl]).id)
-      200
+      raise Forbidden unless Source.create(:identifier => params[:identifier], :url_id => URL.find(params[:rootUrl]).id)
     end
 
     not_found do

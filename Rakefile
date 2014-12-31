@@ -14,11 +14,14 @@ namespace :db do
   end
 
   task :setup do
+    puts "RUNNING SETUP"
     Sequel.extension :migration
 
     if ENV["TRAFFIC_SPY_ENV"] == "test"
-      database_file = 'db/traffic_spy-test.sqlite3'
-      @database = Sequel.sqlite database_file
+      #check if db exists; if not, create it
+      # database_file = 'db/traffic_spy-test.sqlite3'
+      # @database = Sequel.sqlite database_file
+      @database = Sequel.postgres "traffic_spy_test"
     else
       @database = Sequel.postgres "traffic_spy"
     end

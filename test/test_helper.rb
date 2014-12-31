@@ -1,4 +1,5 @@
-ENV["RACK_ENV"] = "test"
+# ENV["RACK_ENV"] = "test"
+ENV["TRAFFIC_SPY_ENV"] = "test"
 
 lib_dir = File.expand_path("../lib", __dir__)
 $LOAD_PATH.unshift(lib_dir)
@@ -15,4 +16,3 @@ require 'pry'
 # require 'minitest/mock'
 
 require_relative '../lib/traffic_spy'
-
