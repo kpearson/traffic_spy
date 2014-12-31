@@ -19,6 +19,14 @@ class ServerTest < Minitest::Test
     assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
   end
 
+
+  def test_response_code_400_with_exclusions
+    post '/source', {identifier: ""}
+    assert_equal 400, last_response.status
+    refute last_response.ok?
+    assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
+  end
+
   def test_response_code_403
     post '/source', {identifier: "aa", rootUrl: "url"}
     post '/source', {identifier: "aa", rootUrl: "url"}
