@@ -14,4 +14,5 @@ end
 #
 # @example
 #
-# require 'traffic_spy/models/request'
+require 'traffic_spy/models/source'
+require 'traffic_spy/models/url'

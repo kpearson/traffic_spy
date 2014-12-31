@@ -11,15 +11,35 @@ module TrafficSpy
   # That's where Sinatra::Base comes into play:
   #
   class Server < Sinatra::Base
+    class BadRequest < StandardError; end
+    class Forbidden  < StandardError; end
+
     set :views, 'lib/views'
 
     get '/' do
       erb :index
     end
 
+    post '/source' do
+      raise BadRequest if params[:rootUrl] == "" || params[:identifier] == ""
+      raise Forbidden if params[:identifier] == Source.find(:identifier)
+      URL.add(params[:rootUrl])
+      Source.create(params[:identifier], URL.find(params[:rootUrl]).id)
+      200
+    end
+
     not_found do
       erb :error
     end
-  end
 
+    error BadRequest do
+      status 400
+      body "400 Bad request/n Please make sure all fields are filled out."
+    end
+
+    error Forbidden do
+      status 403
+      body "403 Forbidden/n Please ensure identifier is unique."
+    end
+  end
 end
