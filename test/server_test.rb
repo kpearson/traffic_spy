@@ -28,7 +28,6 @@ class ServerTest < Minitest::Test
   end
 
   def test_response_code_403
-    puts "RUNNING OUR TEST"
     post '/source', {identifier: "aa", rootUrl: "url"}
     post '/source', {identifier: "aa", rootUrl: "url"}
     assert_equal 403, last_response.status

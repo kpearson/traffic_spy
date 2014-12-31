@@ -14,9 +14,8 @@ namespace :db do
   end
 
   task :setup do
-    puts "RUNNING SETUP"
     Sequel.extension :migration
-
+    `createdb traffic_spy_test`
     if ENV["TRAFFIC_SPY_ENV"] == "test"
       #check if db exists; if not, create it
       # database_file = 'db/traffic_spy-test.sqlite3'

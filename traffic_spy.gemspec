@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
   gem.license       = "MIT"
 
-  gem.add_dependency "sinatra", "1.3.5"
+  gem.add_dependency "sinatra", "1.4.5"
   gem.add_dependency "sequel", "3.44.0"
   gem.add_dependency "pg", "0.14.1"
 

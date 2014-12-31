@@ -23,10 +23,11 @@ module TrafficSpy
     post '/source' do
       raise BadRequest if params[:rootUrl].to_s.empty? || params[:identifier].to_s.empty?
       URL.add(params[:rootUrl])
-      raise Forbidden unless Source.create(:identifier => params[:identifier], :url_id => URL.find(params[:rootUrl]).id)
+      raise Forbidden unless Source.create(params[:identifier], URL.find(params[:rootUrl]).id)
     end
 
     not_found do
+      status 404
       erb :error
     end
 
