@@ -12,9 +12,6 @@ module TrafficSpy
       DB.from(:urls)
     end
 
-
-
-
     def self.create(url)
         table.insert(
         :id     => next_id,
@@ -27,8 +24,9 @@ module TrafficSpy
     end
 
     def self.find(url)
-      row = table.where(url: url).first
-      URL.new(row) if row
+      require 'pry' ; binding.pry
+      table.where(url: url).first
+      # Source.new(row)
     end
   end
 end

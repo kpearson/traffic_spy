@@ -1,10 +1,13 @@
+require 'json'
+
 module TrafficSpy
   class Payload
 
     def self.create(params, source_id)
+      params = payload_parser(params)
         table.insert(
-          :source_id     => Sources.find(params[:url]) || Sources.create(params[:url]).id,
-          :url_id        => URL.find(params[:url]) || URL.create(params[:url]).id,
+          :source_id     => source_id,
+          :url_id        => URL.find(URI(params["url"]).host).id || URL.create(params[:url]).id,
           :requestedAt   => requestedAt,
           :respondedIn   => respondedIn,
           :referredBy_id => referredBy_id,
@@ -19,6 +22,10 @@ module TrafficSpy
 
     def self.table
       DB.from(:payloads)
+    end
+
+    def self.payload_parser(params)
+      JSON.parse(params)
     end
   end
 end

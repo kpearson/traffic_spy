@@ -15,8 +15,8 @@ module TrafficSpy
       create(identifier, root_url) if find(identifier).nil?
     end
 
-    def self.find(identifier)
-      table.where(identifier: identifier).first
+    def self.find(url)
+      table.where(url: url).first
       # Source.new(row)
     end
 
