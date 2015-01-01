@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-class URLTest < Minitest::Test
+class URLTest < FeatureTest
 
   def test_create_and_find_source
     TrafficSpy::URL.create("jumpstartlab.com")

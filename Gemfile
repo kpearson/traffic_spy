@@ -10,6 +10,7 @@ group :development do
   gem 'minitest', '~> 5.2'
   gem 'rack-test'
   gem 'rb-fsevent', '~> 0.9'
+  gem 'database_cleaner'
 end
 
 group :evaluations do

@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-class PayloadTest < Minitest::Test
+class PayloadTest < FeatureTest
 
   def test_create_and_find_source_id
     data = {"url" => "http://jumpstartlab.com/blog",

@@ -4,7 +4,7 @@ module TrafficSpy
     def initialize(attributes)
       # @id         = attributes[:id]
       @identifier = attributes[:identifier]
-      @root_url   = attributes[:url_id]
+      @root_url   = attributes[:root_url]
     end
 
     def self.table
@@ -15,8 +15,8 @@ module TrafficSpy
       create(identifier, root_url) if find(identifier).nil?
     end
 
-    def self.find(url)
-      table.where(url: url).first
+    def self.find(identifier)
+      table.where(identifier: identifier).first
       # Source.new(row)
     end
 
