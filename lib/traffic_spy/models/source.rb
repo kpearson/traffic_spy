@@ -2,34 +2,37 @@ module TrafficSpy
   class Source
 
     def initialize(attributes)
-      @id         = attributes[:id]
+      # @id         = attributes[:id]
       @identifier = attributes[:identifier]
-      @url_id     = attributes[:url_id]
+      @root_url   = attributes[:url_id]
     end
 
     def self.table
       DB.from(:sources)
     end
 
+    def self.add(identifier, root_url)
+      create(identifier, root_url) if find(identifier).nil?
+    end
 
     def self.find(identifier)
       table.where(identifier: identifier).first
       # Source.new(row)
     end
 
-    def self.next_id
-      table.count + 1
-    end
+    # def self.next_id
+    #   table.count + 1
+    # end
 
-    def self.create(identifier, url_id)
-        begin
-          table.insert(
-          :id          => next_id,
+    def self.create(identifier, root_url)
+      begin
+        table.insert(
+          # :id          => next_id,
           :identifier  => identifier,
-          :url_id      => url_id
-          )
+          :root_url    => root_url
+        )
         rescue Sequel::UniqueConstraintViolation
-          return false
+        return false
       end
     end
   end

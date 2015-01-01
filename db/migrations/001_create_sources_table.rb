@@ -3,7 +3,7 @@ Sequel.migration do
     create_table(:sources) do
       primary_key        :id
       String             :identifier, :unique => true
-      foreign_key        :url_id,     :urls
+      String             :root_url
     end
   end
 end
