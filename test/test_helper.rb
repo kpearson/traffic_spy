@@ -14,6 +14,7 @@ require 'rack/test'
 require 'pry'
 
 require_relative '../lib/traffic_spy'
+require_relative './fixtures/payload_data'
 
 module CleanTheDatabase
   DatabaseCleaner.strategy=(:truncation)
@@ -33,4 +34,5 @@ end
 
 class FeatureTest < MiniTest::Test
   include Rack::Test::Methods
-  end
+  include Payload
+end

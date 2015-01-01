@@ -35,7 +35,7 @@ class ServerTest < FeatureTest
   end
 
   def test_payload_accepted_successfully
-    ???
+    Payload::DATA
     post '/sources/jumpstartlabs/data'
     assert last_response.ok?
   end
