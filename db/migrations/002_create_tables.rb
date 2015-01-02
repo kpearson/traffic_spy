@@ -7,7 +7,7 @@ Sequel.migration do
 
     create_table(:referred_by) do
       primary_key        :id
-      String             :refferer
+      String             :referrer
     end
 
     create_table(:events) do

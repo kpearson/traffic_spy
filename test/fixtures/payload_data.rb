@@ -17,7 +17,7 @@ module Payload
   DATA2 = {"url"=>"http://jumpstartlab.com/about",
           "requestedAt"=>"2013-02-16 21:38:28 -0700",
           "respondedIn"=>37,
-          "referredBy"=>"http://jumpstartlab.com",
+          "referredBy"=>"http://turing.io",
           "requestType"=>"GET",
           "parameters"=>[],
           "eventName"=>"otherEvent",

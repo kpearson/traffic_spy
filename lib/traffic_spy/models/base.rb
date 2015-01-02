@@ -11,3 +11,6 @@ end
 require 'traffic_spy/models/source'
 require 'traffic_spy/models/payload'
 require 'traffic_spy/models/url'
+require 'traffic_spy/models/referred_by'
+require 'traffic_spy/models/event'
+require 'traffic_spy/models/user_agent'

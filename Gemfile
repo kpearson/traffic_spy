@@ -11,6 +11,7 @@ group :development do
   gem 'rack-test'
   gem 'rb-fsevent', '~> 0.9'
   gem 'database_cleaner'
+  gem 'useragent'
 end
 
 group :evaluations do

@@ -2,21 +2,41 @@ require 'json'
 
 module TrafficSpy
   class Payload
+    attr_reader :id,
+                :source_id,
+                :url_id,
+                :requested_at,
+                :responded_in,
+                :request_type,
+                :parameters,
+                :ip
+
+    def initialize(attributes)
+      @id = attributes[:id]
+      @source_id = attributes[:source_id]
+      @url_id = attributes[:url_id]
+      @requested_at = attributes[:requested_at]
+      @responded_in = attributes[:responded_in]
+      @request_type = attributes[:request_type]
+      @parameters = attributes[:parameters]
+      @ip = attributes[:ip]
+    end
+
 
     def self.create(params, source_id)
       params = payload_parser(params)
         table.insert(
-          :source_id     => source_id,
-          :url_id        => URL.add(URI(params["url"]).path),
-          :requestedAt   => requestedAt,
-          :respondedIn   => respondedIn,
-          :referredBy_id => referredBy_id,
-          :requestType   => requestType,
-          :parameters    => parameters,
-          :eventName_id  => eventName_id,
-          :userAgent_id  => userAgent_id,
-          :resolution_id => resolution_id,
-          :ip            => ip
+          :source_id      => source_id,
+          :url_id         => URL.add(URI(params["url"]).path),
+          :requested_at   => params["requestedAt"],
+          :responded_in   => params["respondedIn"],
+          :referred_by_id => ReferredBy.add(params["referrer"]),
+          :request_type   => params["requestType"],
+          :parameters     => params["parameters"],
+          :event_name_id  => Event.add(params["eventName"]),
+          :user_agent_id  => UserAgent.add(params["userAgent"]),
+          :resolution_id  => resolution_id,
+          :ip             => params["ip"]
         )
     end
 
