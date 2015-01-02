@@ -17,7 +17,6 @@ module TrafficSpy
     end
 
     def self.create(url)
-      # require 'pry' ; binding.pry
         DB.from(:urls).insert(
         :url    => url
       )
