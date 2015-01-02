@@ -8,11 +8,18 @@ class URLTest < FeatureTest
   end
 
   def test_add_creates_if_unique
+    # TrafficSpy::URL.create(Payload::DATA1["url"])
+
     TrafficSpy::URL.add(Payload::DATA1["url"])
     assert_equal 1, TrafficSpy::URL.table.count
     TrafficSpy::URL.add(Payload::DATA1["url"])
     assert_equal 1, TrafficSpy::URL.table.count
     TrafficSpy::URL.add(Payload::DATA2["url"])
     assert_equal 2, TrafficSpy::URL.table.count
+  end
+
+  def test_can_retrieve_id
+    TrafficSpy::URL.create(Payload::DATA1["url"])
+    assert TrafficSpy::URL.find(Payload::DATA1["url"]).id
   end
 end

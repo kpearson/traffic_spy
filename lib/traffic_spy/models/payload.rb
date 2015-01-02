@@ -5,10 +5,9 @@ module TrafficSpy
 
     def self.create(params, source_id)
       params = payload_parser(params)
-      require 'pry' ; binding.pry
         table.insert(
           :source_id     => source_id,
-          :url_id        => URL.find(URI(params["url"]).path).id || URL.create(URI(params["url"]).path).id,
+          :url_id        => URL.add(URI(params["url"]).path),
           :requestedAt   => requestedAt,
           :respondedIn   => respondedIn,
           :referredBy_id => referredBy_id,
