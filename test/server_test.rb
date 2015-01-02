@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class ServerTest < Minitest::Test
+class ServerTest < FeatureTest
   include Rack::Test::Methods
 
   def app
@@ -19,11 +19,25 @@ class ServerTest < Minitest::Test
     assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
   end
 
+
+  def test_response_code_400_with_missing_param
+    post '/source', { rootUrl: ""}
+    assert_equal 400, last_response.status
+    refute last_response.ok?
+    assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
+  end
+
   def test_response_code_403
     post '/source', {identifier: "aa", rootUrl: "url"}
     post '/source', {identifier: "aa", rootUrl: "url"}
     assert_equal 403, last_response.status
     refute last_response.ok?
+  end
+
+  def test_payload_accepted_successfully
+    Payload::DATA1
+    post '/sources/jumpstartlabs/data'
+    assert last_response.ok?
   end
 
 end
