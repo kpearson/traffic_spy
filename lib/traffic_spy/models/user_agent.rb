@@ -1,13 +1,20 @@
+module Utility
+  require 'useragent'
+  class UserAgent < UserAgent
+  end
+end
+
 module TrafficSpy
 
   class UserAgent
+    extend Utility
     attr_reader :id, :data, :os, :browser
 
     def initialize(attributes)
       @id       = attributes[:id]
-      @data     = attribute_parser(attributes, data)
-      @os       = attribute_parser(attributes, os)
-      @browser  = attribute_parser(attributes, user_agent)
+      @data     = attributes[:data]
+      @os       = attributes[:OS]
+      @browser  = attributes[:browser]
     end
 
     def self.table
@@ -20,24 +27,37 @@ module TrafficSpy
 
     def self.create(user_agent)
       table.insert(
-      :user_agent    => user_agent
+        :OS      => agent_parser(user_agent, "platform"),
+        :browser => agent_parser(user_agent, "browser"),
+        :data    => user_agent
       )
     end
 
-    def self.find(user_agent)
-      row = table.where(user_agent: user_agent).first
+    def self.find_by_os(user_agent_os)
+      # binding.pry
+      rows = table.where(OS: user_agent_os)
+      rows.each { |row| UserAgent.new(row) }
+    end
+
+    def self.find_all_by_browser(user_agent_browser)
+      rows = table.where(browser: user_agent_browser)
+      rows.each { |row| UserAgent.new(row) }
+    end
+
+    def self.find_by_data(user_agent)
+      row = table.where(data: user_agent).first
       UserAgent.new(row)
+    end
+
+    def self.agent_parser(data, type)
+      agent = Utility::UserAgent.parse(data)
+      agent.send(type)
     end
 
     private
 
-    def self.attribute_parser(atters, type)
-      attributes = UserAgent.parse(atters)
-      attributes.type
-    end
-
     def self.not_created?(user_agent)
-      table.where(user_agent: user_agent).first == nil
+      table.where(data: user_agent).first == nil
     end
   end
 end

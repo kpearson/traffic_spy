@@ -22,7 +22,7 @@ module Payload
           "parameters"=>[],
           "eventName"=>"otherEvent",
           "userAgent"=>
-          "Safari/5.0 (Macintosh%3B Intel Mac OS X 10_5_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
+          "Mozilla/5.0 (Macintosh%3B Intel Mac OS X 10_5_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
           "resolutionWidth"=>"1500",
           "resolutionHeight"=>"1300",
           "ip"=>"63.29.38.211"
