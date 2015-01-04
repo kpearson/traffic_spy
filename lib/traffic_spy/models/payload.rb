@@ -2,23 +2,42 @@ require 'json'
 
 module TrafficSpy
   class Payload
+    attr_reader :id,
+      :source_id,
+      :url_id,
+      :requested_at,
+      :responded_in,
+      :request_type,
+      :parameters,
+      :ip
+
+    def initialize(attributes)
+      @id           = attributes[:id]
+      @source_id    = attributes[:source_id]
+      @url_id       = attributes[:url_id]
+      @requested_at = attributes[:requested_at]
+      @responded_in = attributes[:responded_in]
+      @request_type = attributes[:requested_type]
+      @parameters   = attributes[:parameters]
+      @ip           = attributes[:ip]
+    end
+
 
     def self.create(params, source_id)
       params = payload_parser(params)
-      require 'pry' ; binding.pry
-        table.insert(
-          :source_id     => source_id,
-          :url_id        => URL.find(URI(params["url"]).path).id || URL.create(URI(params["url"]).path).id,
-          :requestedAt   => requestedAt,
-          :respondedIn   => respondedIn,
-          :referredBy_id => referredBy_id,
-          :requestType   => requestType,
-          :parameters    => parameters,
-          :eventName_id  => eventName_id,
-          :userAgent_id  => userAgent_id,
-          :resolution_id => resolution_id,
-          :ip            => ip
-        )
+      table.insert(
+        :source_id      => source_id,
+        :url_id         => URL.add(URI(params["url"]).path),
+        :requested_at   => params["requestedAt"],
+        :responded_in   => params["respondedIn"],
+        :referred_by_id => ReferredBy.add(params["referrer"]),
+        :requested_type => params["requestType"],
+        :parameters     => params.to_json,
+        :event_id       => Event.add(params["eventName"]),
+        :user_agent_id  => UserAgent.add(params["userAgent"]),
+        :resolution_id  => Resolution.add(params["resolutionWidth"], params["resolutionHeight"]),
+        :ip             => params["ip"]
+      )
     end
 
     def self.table
@@ -27,6 +46,32 @@ module TrafficSpy
 
     def self.payload_parser(params)
       JSON.parse(params)
+    end
+
+    def self.find_by_source_id(source)
+      table.where(source_id: source)
+    end
+
+    def duplicate_payload?(params)
+      params = params.join(',')
+      table.where(parameters: params)
+    end
+
+    def self.invalid?(params)
+      params = payload_parser(params)
+      if params["url"] &&
+          params["requestedAt"] &&
+          params["respondedIn"] &&
+          params["referredBy"] &&
+          params["requestType"] &&
+          params["parameters"] &&
+          params["eventName"] &&
+          params["userAgent"] &&
+          params["resolutionWidth"] &&
+          params["resolutionHeight"] &&
+          params["ip"]
+        return true
+      end
     end
   end
 end

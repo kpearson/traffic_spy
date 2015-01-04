@@ -2,6 +2,7 @@ Sequel.migration do
   change do
     create_table(:payloads) do
       primary_key        :id
+      foreign_key        :url_id, :urls
       foreign_key        :source_id, :sources
       DateTime           :requested_at
       foreign_key        :referred_by_id, :referred_by

@@ -20,16 +20,18 @@ module TrafficSpy
       erb :index
     end
 
-    post '/source' do
-      raise BadRequest if params[:rootUrl].to_s.empty? || params[:identifier].to_s.empty?
+    post '/sources' do
+      raise BadRequest if params[:rootUrl].to_s.empty? ||
+                          params[:identifier].to_s.empty?
       raise Forbidden unless Source.add(params[:identifier], params[:rootUrl])
     end
 
     post '/sources/:identifier/data' do |identifier|
-      if Source.find(identifier)
-        source_id = Source.find(identifier)
-        Payload.create(params[:data], source_id)
-      end
+      raise BadRequest unless Payload.invalid?(params[:payload])
+      raise Forbidden unless Source.find(identifier)
+      source_id = Source.find(identifier)
+      Payload.create(params[:payload], source_id[:id])
+      200
     end
 
     not_found do
@@ -39,12 +41,12 @@ module TrafficSpy
 
     error BadRequest do
       status 400
-      body "400 Bad request/n Please make sure all fields are filled out."
+      body "400 Bad request\n Please make sure all fields are filled out."
     end
 
     error Forbidden do
       status 403
-      body "403 Forbidden/n Please ensure identifier is unique."
+      body "403 Forbidden\n Please ensure identifier is unique."
     end
   end
 end

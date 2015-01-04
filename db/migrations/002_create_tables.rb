@@ -7,7 +7,7 @@ Sequel.migration do
 
     create_table(:referred_by) do
       primary_key        :id
-      String             :refferer
+      String             :referrer
     end
 
     create_table(:events) do
@@ -18,14 +18,13 @@ Sequel.migration do
     create_table(:user_agents) do
       primary_key        :id
       String             :data
-      String             :OS
+      String             :os
       String             :browser
     end
 
     create_table(:resolutions) do
       primary_key        :id
-      String             :height
-      String             :width
+      String             :resolution
     end
   end
 end

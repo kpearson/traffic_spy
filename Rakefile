@@ -1,9 +1,17 @@
 require "bundler/gem_tasks"
 Bundler.require
 
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/*_test.rb', 'test/models/*_test.rb']
+  t.verbose = true
+end
+
 namespace :db do
   desc "Run migrations"
-  task :migrate => [:setup] do
+  task :migrate do
     Sequel::Migrator.run(@database, "db/migrations")
   end
 
