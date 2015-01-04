@@ -21,7 +21,6 @@ class ServerTest < FeatureTest
     assert_equal responce, last_response.body
   end
 
-
   def test_response_code_400_with_missing_param
     responce = "400 Bad request\n Please make sure all fields are filled out."
     post '/sources', { rootUrl: ""}
@@ -50,6 +49,14 @@ class ServerTest < FeatureTest
     assert_equal 400, last_response.status
     refute last_response.ok?
     assert_equal responce, last_response.body
+  end
+
+  def test_payload_create_rejects_duplicate_payload
+    TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA1).to_json}"
+    assert last_response.ok?
+    post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA1).to_json}"
+    assert_equal 400, last_response.status
   end
 
 end

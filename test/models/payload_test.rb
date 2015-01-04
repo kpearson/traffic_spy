@@ -2,10 +2,14 @@ require_relative '../test_helper'
 
 class PayloadTest < FeatureTest
 
+  def before
+    @source = TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    # @payload_1 = TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
+    # @payload_2 = TrafficSpy::Payload.create(Payload::DATA2.to_json, @source)
+  end
+
   def test_create_and_find_source_id
-    source = TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
-    TrafficSpy::Payload.create(Payload::DATA1.to_json, source)
-    assert TrafficSpy::Payload.find_by_source_id(source)
+    assert TrafficSpy::Payload.find_by_source_id(@source)
   end
 
   def test_create_requested_at
@@ -14,7 +18,15 @@ class PayloadTest < FeatureTest
     # assert_equal "2013-02-16 21:38:28 -0700", TrafficSpy::Payload.find("jumpstartlabs").requested_at
   end
 
-  def test_it_can_determine_if_payload_is_invalid
-    refute TrafficSpy::Payload.invalid?(Payload::DATA3.to_json)
+  def test_it_can_determine_if_payload_is_valid?
+    assert TrafficSpy::Payload.valid?(Payload::DATA1.to_json)
+    refute TrafficSpy::Payload.valid?(Payload::DATA3.to_json)
+           TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
+    refute TrafficSpy::Payload.valid?(Payload::DATA1.to_json)
+  end
+
+  def test_unique_payload?
+    TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
+    refute TrafficSpy::Payload.unique_payload?(Payload::DATA1.to_json)
   end
 end

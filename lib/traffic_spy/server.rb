@@ -27,7 +27,7 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do |identifier|
-      raise BadRequest unless Payload.invalid?(params[:payload])
+      raise BadRequest unless Payload.valid?(params[:payload])
       raise Forbidden unless Source.find(identifier)
       source_id = Source.find(identifier)
       Payload.create(params[:payload], source_id[:id])
