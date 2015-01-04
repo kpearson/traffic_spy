@@ -52,6 +52,14 @@ module TrafficSpy
       table.where(source_id: source)
     end
 
+    def self.find_urls(source_id)
+      table.join(:urls, :id => :url_id).to_a
+    end
+
+    def self.find_events(source_id)
+      table.join(:events, :id => :event_id).to_a
+    end
+
     def self.unique?(payload)
       table.where(parameters: payload).first == nil
     end

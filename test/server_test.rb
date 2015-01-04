@@ -68,7 +68,15 @@ class ServerTest < FeatureTest
 
   def test_route_source_view
     TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA1).to_json}"
     get '/sources/jumpstartlabs'
+    assert last_response.ok?
+    # assert_equal "Hello jumpstartlabs", last_response.body
+  end
+
+  def test_route_events_view
+    TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    get '/sources/jumpstartlabs/events'
     assert last_response.ok?
   end
 end

@@ -12,6 +12,8 @@ group :development do
   gem 'rb-fsevent', '~> 0.9'
   gem 'database_cleaner'
   gem 'useragent'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :evaluations do

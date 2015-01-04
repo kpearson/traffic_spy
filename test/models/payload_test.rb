@@ -27,4 +27,11 @@ class PayloadTest < FeatureTest
     TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
     refute TrafficSpy::Payload.unique?(Payload::DATA1.to_json)
   end
+
+  def test_can_find_all_urls_by_source_id
+    TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
+    TrafficSpy::Payload.create(Payload::DATA2.to_json, @source)
+    source_id = TrafficSpy::Payload.find_by_source_id("jumpstartlabs")
+    assert_equal 2, TrafficSpy::Payload.find_urls(source_id).count
+  end
 end

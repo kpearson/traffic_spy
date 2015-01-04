@@ -41,10 +41,14 @@ module TrafficSpy
 
     get '/sources/:identifier' do |identifier|
       raise Forbidden, " Application not registered." unless
-      Source.find(identifier)
-      erb :source
+        Source.find(identifier)
+      erb :source, locals: { urls: TrafficSpy::SourceView.find_urls(identifier) }
     end
 
+    get '/sources/:identifier/events' do |identifier|
+      "what up"
+      erb :events
+    end
 
     error BadRequest do
       status 400
@@ -53,12 +57,23 @@ module TrafficSpy
 
     error Forbidden do
       status 403
-      body "403 Forbidden" + env['sinatra.error'].message
+      body = "403 Forbidden" + env['sinatra.error'].message
+      erb :error, locals: {body: body}
     end
 
     not_found do
       status 404
-      erb :error
+      body = "Sorry, we can't find that page."
+      erb :error, locals: {body: body}
     end
+
+    # configure :development do
+    #   use BetterErrors::Middleware
+    #   BetterErrors.application_root = File.expand_path('..', __FILE__)
+    # end
+    #
+    # get '/' do
+    #   raise 'Oops! See better errors page'
+    # end
   end
 end

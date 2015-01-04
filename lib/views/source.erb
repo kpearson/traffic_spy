@@ -1,1 +1,8 @@
-<h1>Hello, Sourciy type person</h1>
+<h1>Hello, <%= :identifier %></h1>
+
+<table>
+  <tr><td colspan=2>Most visited URLs</td></tr>
+  <% urls.each do |url| %>
+  <tr><td><%= url[:url] %></td></tr>
+  <% end  %>
+</table>
