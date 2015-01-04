@@ -21,12 +21,10 @@ class PayloadTest < FeatureTest
   def test_it_can_determine_if_payload_is_valid?
     assert TrafficSpy::Payload.valid?(Payload::DATA1.to_json)
     refute TrafficSpy::Payload.valid?(Payload::DATA3.to_json)
-           TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
-    refute TrafficSpy::Payload.valid?(Payload::DATA1.to_json)
   end
 
   def test_unique_payload?
     TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
-    refute TrafficSpy::Payload.unique_payload?(Payload::DATA1.to_json)
+    refute TrafficSpy::Payload.unique?(Payload::DATA1.to_json)
   end
 end

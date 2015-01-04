@@ -1,8 +1,8 @@
 require 'sinatra'
 require 'capybara'
 
-require_relative "../test_helper"
-require_relative '../../lib/traffic_spy.rb'
+require_relative '../test_helper'
+require_relative '../../lib/traffic_spy'
 
 Capybara.app = TrafficSpy::Server
 

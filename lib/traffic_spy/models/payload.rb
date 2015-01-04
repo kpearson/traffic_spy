@@ -52,14 +52,13 @@ module TrafficSpy
       table.where(source_id: source)
     end
 
-    def self.unique_payload?(payload)
+    def self.unique?(payload)
       table.where(parameters: payload).first == nil
     end
 
     def self.valid?(payload)
       params = payload_parser(payload)
-      if unique_payload?(payload) &&
-        params["url"] &&
+      data = params["url"] &&
         params["requestedAt"] &&
         params["respondedIn"] &&
         params["referredBy"] &&
@@ -70,11 +69,7 @@ module TrafficSpy
         params["resolutionWidth"] &&
         params["resolutionHeight"] &&
         params["ip"]
-        true
-      else
-        false
-      end
+      data != nil
     end
   end
 end
-
