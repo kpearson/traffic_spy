@@ -1,0 +1,1 @@
+dropdb traffic_spy_test && psql -l && createdb traffic_spy_test && psql -l && TRAFFIC_SPY_ENV=test rake db:migrate

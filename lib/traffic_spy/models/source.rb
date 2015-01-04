@@ -20,14 +20,10 @@ module TrafficSpy
       # Source.new(row)
     end
 
-    # def self.next_id
-    #   table.count + 1
-    # end
 
     def self.create(identifier, root_url)
       begin
         table.insert(
-          # :id          => next_id,
           :identifier  => identifier,
           :root_url    => root_url
         )

@@ -1,13 +1,11 @@
 module TrafficSpy
 
   class Resolution
-    extend Utility
-    attr_reader :id, :width, :height
+    attr_reader :id, :resolution
 
     def initialize(attributes)
-      @id       = attributes[:id]
-      @width    = attributes[:width]
-      @height   = attributes[:height]
+      @id         = attributes[:id]
+      @resolution = attributes[:resolution]
     end
 
     def self.table
@@ -15,30 +13,25 @@ module TrafficSpy
     end
 
     def self.add(width, height)
-      create(height, width) if not_created?(width, height)
+      create(width, height) if not_created?(width, height)
     end
 
     def self.create(width, height)
+      resolution = "#{width } x #{ height}"
       table.insert(
-        :width  => width,
-        :height => height
+        :resolution  => resolution,
       )
     end
 
-    def self.find_by_all_height(height)
-      rows = table.where(height: height)
-      rows.each { |row| Resolution.new(row) }
-    end
-
-    def self.find_all_by_width(width)
-      rows = table.where(width: width)
-      rows.each { |row| Resolution.new(row) }
+    def self.find(resolution)
+      table.where(resolution: resolution).first
     end
 
     private
 
     def self.not_created?(width, height)
-      table.where(width: width).where(height: height).first == nil
+      resolution = "#{width } x #{ height}"
+      table.where(resolution: resolution).first == nil
     end
   end
 end

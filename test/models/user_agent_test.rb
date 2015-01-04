@@ -16,11 +16,6 @@ class UserAgentTest < FeatureTest
     assert_equal 2, TrafficSpy::UserAgent.table.count
   end
 
-  def test_find_all_by_os
-    TrafficSpy::UserAgent.create(Payload::DATA1["userAgent"])
-    assert TrafficSpy::UserAgent.find_by_os("Macintosh%3B Intel Mac OS X 10_5_2")
-  end
-
   def test_find_all_by_browser
     TrafficSpy::UserAgent.create(Payload::DATA1["userAgent"])
     TrafficSpy::UserAgent.create(Payload::DATA2["userAgent"])
@@ -29,7 +24,12 @@ class UserAgentTest < FeatureTest
 
   def test_agent_parser
     user_agent = Payload::DATA1["userAgent"]
-    browser = TrafficSpy::UserAgent.agent_parser(user_agent, "browser")
+    browser = TrafficSpy::UserAgent.browser_parser(user_agent)
     assert_equal "Chrome", browser
+  end
+
+  def test_find_by_os
+    TrafficSpy::UserAgent.create(Payload::DATA1["userAgent"])
+    assert TrafficSpy::UserAgent.find_by_os("Macintosh%3B Intel Mac OS X 10_8_2")
   end
 end

@@ -13,31 +13,43 @@ class ServerTest < FeatureTest
   end
 
   def test_response_code_400
-    post '/source', {identifier: "", rootUrl: ""}
+    responce = "400 Bad request\n Please make sure all fields are filled out."
+               " and each of your data submitions is unique."
+    post '/sources', {identifier: "", rootUrl: ""}
     assert_equal 400, last_response.status
     refute last_response.ok?
-    assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
+    assert_equal responce, last_response.body
   end
 
 
   def test_response_code_400_with_missing_param
-    post '/source', { rootUrl: ""}
+    responce = "400 Bad request\n Please make sure all fields are filled out."
+    post '/sources', { rootUrl: ""}
     assert_equal 400, last_response.status
     refute last_response.ok?
-    assert_equal "400 Bad request/n Please make sure all fields are filled out.", last_response.body
+    assert_equal responce, last_response.body
   end
 
   def test_response_code_403
-    post '/source', {identifier: "aa", rootUrl: "url"}
-    post '/source', {identifier: "aa", rootUrl: "url"}
+    post '/sources', {identifier: "aa", rootUrl: "url"}
+    post '/sources', {identifier: "aa", rootUrl: "url"}
     assert_equal 403, last_response.status
     refute last_response.ok?
   end
 
   def test_payload_accepted_successfully
-    Payload::DATA1
-    post '/sources/jumpstartlabs/data'
+    TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA1).to_json}"
     assert last_response.ok?
+  end
+
+  def test_response_code_400_for_payload
+    responce = "400 Bad request\n Please make sure all fields are filled out."
+    TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA3).to_json}"
+    assert_equal 400, last_response.status
+    refute last_response.ok?
+    assert_equal responce, last_response.body
   end
 
 end
