@@ -13,33 +13,33 @@ class ServerTest < FeatureTest
   end
 
   def test_response_code_400_missing_or_incomplete_payload
-    responce = "400 Bad request\nPlease ensure payload data is correct."
+    response = "400 Bad request\nPlease ensure payload data is correct."
     TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
     post '/sources/jumpstartlabs/data', "payload=#{(Payload::DATA3).to_json}"
     assert_equal 400, last_response.status
-    assert_equal responce, last_response.body
-    # post '/sources/jumpstartlabs/data'
-    # assert_equal 400, last_response.status
-    # assert_equal responce, last_response.body
+    assert_equal response, last_response.body
+    post '/sources/jumpstartlabs/data'
+    assert_equal 400, last_response.status
+    assert_equal response, last_response.body
   end
 
   def test_response_code_400_missing_identifier_rooturl
-    responce = "400 Bad request\nPlease make sure all fields are filled out."
+    response = "400 Bad request\nPlease make sure all fields are filled out."
     post '/sources', { rootUrl: ""}
     assert_equal 400, last_response.status
-    assert_equal responce, last_response.body
-    # post '/sources'
-    # assert_equal 400, last_response.status
-    # assert_equal responce, last_response.body
+    assert_equal response, last_response.body
+    post '/sources'
+    assert_equal 400, last_response.status
+    assert_equal response, last_response.body
   end
 
   def test_route_403_forbidden_identifier_already_exists
-    responce = "403 Forbidden Identifier already exists."
+    response = "403 Forbidden Identifier already exists."
     post '/sources', {identifier: "aa", rootUrl: "url"}
     assert last_response.ok?
     post '/sources', {identifier: "aa", rootUrl: "url"}
     assert_equal 403, last_response.status
-    assert_equal responce, last_response.body
+    assert_equal response, last_response.body
   end
 
   def test_route_403_forbidden_already_received_request

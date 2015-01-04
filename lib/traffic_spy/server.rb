@@ -29,7 +29,7 @@ module TrafficSpy
 
     post '/sources/:identifier/data' do |identifier|
       raise BadRequest, "Please ensure payload data is correct." unless
-      Payload.valid?(params[:payload])
+      params[:payload] && Payload.valid?(params[:payload])
       raise Forbidden, " Application not registered." unless
       Source.find(identifier)
       raise Forbidden, " Already received request." unless
