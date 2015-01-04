@@ -44,34 +44,32 @@ module TrafficSpy
       DB.from(:payloads)
     end
 
-    def self.payload_parser(params)
-      JSON.parse(params)
+    def self.payload_parser(payload)
+      JSON.parse(payload)
     end
 
     def self.find_by_source_id(source)
       table.where(source_id: source)
     end
 
-    def duplicate_payload?(params)
-      params = params.join(',')
-      table.where(parameters: params)
+    def self.unique?(payload)
+      table.where(parameters: payload).first == nil
     end
 
-    def self.invalid?(params)
-      params = payload_parser(params)
-      if params["url"] &&
-          params["requestedAt"] &&
-          params["respondedIn"] &&
-          params["referredBy"] &&
-          params["requestType"] &&
-          params["parameters"] &&
-          params["eventName"] &&
-          params["userAgent"] &&
-          params["resolutionWidth"] &&
-          params["resolutionHeight"] &&
-          params["ip"]
-        return true
-      end
+    def self.valid?(payload)
+      params = payload_parser(payload)
+      data = params["url"] &&
+        params["requestedAt"] &&
+        params["respondedIn"] &&
+        params["referredBy"] &&
+        params["requestType"] &&
+        params["parameters"] &&
+        params["eventName"] &&
+        params["userAgent"] &&
+        params["resolutionWidth"] &&
+        params["resolutionHeight"] &&
+        params["ip"]
+      data != nil
     end
   end
 end

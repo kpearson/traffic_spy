@@ -21,32 +21,44 @@ module TrafficSpy
     end
 
     post '/sources' do
-      raise BadRequest if params[:rootUrl].to_s.empty? ||
-                          params[:identifier].to_s.empty?
-      raise Forbidden unless Source.add(params[:identifier], params[:rootUrl])
+      raise BadRequest, "Please make sure all fields are filled out." if
+      params[:rootUrl].to_s.empty? || params[:identifier].to_s.empty?
+      raise Forbidden, " Identifier already exists." unless
+      Source.add(params[:identifier], params[:rootUrl])
     end
 
     post '/sources/:identifier/data' do |identifier|
-      raise BadRequest unless Payload.invalid?(params[:payload])
-      raise Forbidden unless Source.find(identifier)
+      raise BadRequest, "Please ensure payload data is correct." unless
+      params[:payload] && Payload.valid?(params[:payload])
+      raise Forbidden, " Application not registered." unless
+      Source.find(identifier)
+      raise Forbidden, " Already received request." unless
+      Payload.unique?(params[:payload])
       source_id = Source.find(identifier)
       Payload.create(params[:payload], source_id[:id])
       200
     end
 
-    not_found do
-      status 404
-      erb :error
+    get '/sources/:identifier' do |identifier|
+      raise Forbidden, " Application not registered." unless
+      Source.find(identifier)
+      erb :source
     end
+
 
     error BadRequest do
       status 400
-      body "400 Bad request\n Please make sure all fields are filled out."
+      body "400 Bad request\n" + env['sinatra.error'].message
     end
 
     error Forbidden do
       status 403
-      body "403 Forbidden\n Please ensure identifier is unique."
+      body "403 Forbidden" + env['sinatra.error'].message
+    end
+
+    not_found do
+      status 404
+      erb :error
     end
   end
 end
