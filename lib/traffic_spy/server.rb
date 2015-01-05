@@ -29,11 +29,11 @@ module TrafficSpy
 
     post '/sources/:identifier/data' do |identifier|
       raise BadRequest, "Please ensure payload data is correct." unless
-      params[:payload] && Payload.valid?(params[:payload])
+        params[:payload] && Payload.valid?(params[:payload])
       raise Forbidden, " Application not registered." unless
-      Source.find(identifier)
+        Source.find(identifier) != nil
       raise Forbidden, " Already received request." unless
-      Payload.unique?(params[:payload])
+        Payload.unique?(params[:payload])
       source_id = Source.find(identifier)
       Payload.create(params[:payload], source_id[:id])
       200
@@ -41,19 +41,28 @@ module TrafficSpy
 
     get '/sources/:identifier' do |identifier|
       raise Forbidden, " Application not registered." unless
-      Source.find(identifier)
+      Source.find(identifier) != nil
       erb :source
     end
 
+    get '/sources/:identifier/events' do |identifier|
+      raise Forbidden, " Application not registered." unless
+        Source.find(identifier) != nil
+      source = Source.find(identifier)[:identifier]
+      erb :events, :locals => {:source => source}
+    end
 
     error BadRequest do
       status 400
+      erb :error
       body "400 Bad request\n" + env['sinatra.error'].message
     end
 
     error Forbidden do
       status 403
-      body "403 Forbidden" + env['sinatra.error'].message
+      body = "403 Forbidden" + env['sinatra.error'].message
+      erb :error, :locals => {:body => body}
+      body
     end
 
     not_found do

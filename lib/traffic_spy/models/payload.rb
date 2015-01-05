@@ -23,8 +23,8 @@ module TrafficSpy
     end
 
 
-    def self.create(params, source_id)
-      params = payload_parser(params)
+    def self.create(payload, source_id)
+      params = payload_parser(payload)
       table.insert(
         :source_id      => source_id,
         :url_id         => URL.add(URI(params["url"]).path),
@@ -32,7 +32,7 @@ module TrafficSpy
         :responded_in   => params["respondedIn"],
         :referred_by_id => ReferredBy.add(params["referrer"]),
         :requested_type => params["requestType"],
-        :parameters     => params.to_json,
+        :parameters     => payload,
         :event_id       => Event.add(params["eventName"]),
         :user_agent_id  => UserAgent.add(params["userAgent"]),
         :resolution_id  => Resolution.add(params["resolutionWidth"], params["resolutionHeight"]),

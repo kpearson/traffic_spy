@@ -1,8 +1,9 @@
 module TrafficSpy
   class Source
-
+    attr_reader :id, :identifier, :root_url
+    
     def initialize(attributes)
-      # @id         = attributes[:id]
+      @id         = attributes[:id]
       @identifier = attributes[:identifier]
       @root_url   = attributes[:root_url]
     end
