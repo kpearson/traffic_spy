@@ -71,4 +71,21 @@ class ServerTest < FeatureTest
     get '/sources/jumpstartlabs'
     assert last_response.ok?
   end
+
+
+  def test_it_can_request_by_url
+    source = TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
+    TrafficSpy::Payload.create( Payload::DATA1.to_json, source)
+    get '/sources/jumpstartlabs/urls/blog'#, "payload=#{(Payload::DATA1).to_json}"
+    assert last_response.ok?
+  end
+  # 
+  # def test_response_code_400_when_missing_url
+  #   response = "The URL has not been requested."
+  #   get '/sources/jumpstartlabs/urls/blog'
+  #   assert_equal response, last_response.body
+  #   post '/sources'
+  #   assert_equal 400, last_response.status
+  #   assert_equal response, last_response.body
+  # end
 end

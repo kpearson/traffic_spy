@@ -30,7 +30,7 @@ module TrafficSpy
         :url_id         => URL.add(URI(params["url"]).path),
         :requested_at   => params["requestedAt"],
         :responded_in   => params["respondedIn"],
-        :referred_by_id => ReferredBy.add(params["referrer"]),
+        :referred_by_id => ReferredBy.add(params["referredBy"]),
         :requested_type => params["requestType"],
         :parameters     => params.to_json,
         :event_id       => Event.add(params["eventName"]),

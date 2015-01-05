@@ -6,6 +6,7 @@ gemspec
 group :development do
   gem 'shotgun'
   gem 'rspec'
+  gem 'sequel'
   gem 'guard-rspec'
   gem 'minitest', '~> 5.2'
   gem 'rack-test'

@@ -1,4 +1,5 @@
 require "bundler/gem_tasks"
+require 'sequel'
 Bundler.require
 
 require 'rake/testtask'
@@ -12,6 +13,12 @@ end
 namespace :db do
   desc "Run migrations"
   task :migrate do
+    Sequel.extension :migration
+    if ENV["TRAFFIC_SPY_ENV"] == "test"
+      @database = Sequel.postgres "traffic_spy_test"
+    else
+      @database = Sequel.postgres "traffic_spy"
+    end
     Sequel::Migrator.run(@database, "db/migrations")
   end
 

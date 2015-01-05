@@ -45,6 +45,33 @@ module TrafficSpy
       erb :source
     end
 
+    get '/sources/:identifier/urls/*' do
+      #raise Forbidden, "The URL has not been requested." unless
+      URL.find(params[:identifier])
+      source = Source.find(params[:identifier])
+      @url = "/"+ params[:splat].join("/")
+      if URL.exists?(@url)
+
+        longest_response_time  = URL.longest_response_time(source, @url)
+        shortest_response_time = URL.shortest_response_time(source, @url)
+        average_response_time  = URL.average_response_time(source, @url)
+        http_verbs             = URL.http_verbs(source, @url)
+        popular_referrers      = URL.popular_referrers(source, @url)
+        popular_user_agents    = URL.popular_user_agents(source, @url)
+        erb :urls, locals: { longest_response_time: longest_response_time,
+                             shortest_response_time: shortest_response_time,
+                             average_response_time: average_response_time,
+                             http_verbs: http_verbs,
+                             popular_referrers: popular_referrers,
+                             popular_user_agents: popular_user_agents}
+      # else
+      #   # @message = "The url #{@url} has never been requested"
+      #   erb :error
+      end
+    end
+
+
+
 
     error BadRequest do
       status 400
