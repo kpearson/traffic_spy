@@ -1,6 +1,8 @@
 require "bundler/gem_tasks"
 Bundler.require
 
+require 'sequel'
+
 require 'rake/testtask'
 
 Rake::TestTask.new do |t|
@@ -11,7 +13,7 @@ end
 
 namespace :db do
   desc "Run migrations"
-  task :migrate do
+  task :migrate => [:setup] do
     Sequel::Migrator.run(@database, "db/migrations")
   end
 

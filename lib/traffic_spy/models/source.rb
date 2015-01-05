@@ -31,5 +31,10 @@ module TrafficSpy
         return false
       end
     end
+
+    # def self.not_created?(identifier)
+    #   table.where(identifier: identifier).first == nil
+    # end
+
   end
 end

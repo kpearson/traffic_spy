@@ -42,7 +42,6 @@ module TrafficSpy
     end
 
     def self.find_by_os(user_agent_os)
-# binding.pry
       rows = table.where(os: user_agent_os)
       rows.each { |row| UserAgent.new(row) }
     end

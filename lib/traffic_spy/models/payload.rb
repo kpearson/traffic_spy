@@ -30,7 +30,7 @@ module TrafficSpy
         :url_id         => URL.add(URI(params["url"]).path),
         :requested_at   => params["requestedAt"],
         :responded_in   => params["respondedIn"],
-        :referred_by_id => ReferredBy.add(params["referrer"]),
+        :referred_by_id => ReferredBy.add(params["referredBy"]),
         :requested_type => params["requestType"],
         :parameters     => params.to_json,
         :event_id       => Event.add(params["eventName"]),
@@ -48,12 +48,40 @@ module TrafficSpy
       JSON.parse(payload)
     end
 
-    def self.find_by_source_id(source)
-      table.where(source_id: source)
+    def self.find_by_source_id(source_id)
+      table.where(source_id: source_id)
     end
 
     def self.find_urls(source_id)
-      table.join(:urls, :id => :url_id).to_a
+      table.select(:url, :count)
+      .where(:source_id=>source_id)
+      .join(:urls, :id=>:url_id)
+      .group_and_count(:url)
+      .order(Sequel.desc(:count)).to_a
+    end
+
+    def self.find_browsers(source_id)
+      table.select(:browser, :count)
+      .where(:source_id=>source_id)
+      .join(:user_agents, :id=>:user_agent_id)
+      .group_and_count(:browser)
+      .order(Sequel.desc(:count)).to_a
+    end
+
+    def self.find_all_os(source_id)
+      table.select(:os, :count)
+      .where(:source_id=>source_id)
+      .join(:user_agents, :id=>:user_agent_id)
+      .group_and_count(:os)
+      .order(Sequel.desc(:count)).to_a
+    end
+
+    def self.find_resolutions(source_id)
+      table.select(:resolution, :count)
+      .where(:source_id=>source_id)
+      .join(:user_agents, :id=>:event_id)
+      .group_and_count(:resolution)
+      .order(Sequel.desc(:count)).to_a
     end
 
     def self.find_events(source_id)

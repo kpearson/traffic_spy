@@ -14,6 +14,7 @@ group :development do
   gem 'useragent'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'sequel'
 end
 
 group :evaluations do

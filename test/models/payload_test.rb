@@ -3,9 +3,7 @@ require_relative '../test_helper'
 class PayloadTest < FeatureTest
 
   def before
-    @source = TrafficSpy::Source.create("jumpstartlabs", "jumpstartlabs.com")
-    # @payload_1 = TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
-    # @payload_2 = TrafficSpy::Payload.create(Payload::DATA2.to_json, @source)
+    @source = TrafficSpy::Source.create("jumpstartlab", "jumpstartlab.com")
   end
 
   def test_create_and_find_source_id
@@ -31,7 +29,15 @@ class PayloadTest < FeatureTest
   def test_can_find_all_urls_by_source_id
     TrafficSpy::Payload.create(Payload::DATA1.to_json, @source)
     TrafficSpy::Payload.create(Payload::DATA2.to_json, @source)
-    source_id = TrafficSpy::Payload.find_by_source_id("jumpstartlabs")
-    assert_equal 2, TrafficSpy::Payload.find_urls(source_id).count
+    TrafficSpy::Payload.create(Payload::DATA4.to_json, @source)
+    assert_equal 2, TrafficSpy::Payload.find_urls(@source).count
+  end
+
+  def test_can_find_all_browsers_by_source_id
+    source_id = TrafficSpy::Source.create("jumpstartlab", "jumpstartlab.com")
+    TrafficSpy::Payload.create(Payload::DATA1.to_json, source_id)
+    TrafficSpy::Payload.create(Payload::DATA2.to_json, source_id)
+    TrafficSpy::Payload.create(Payload::DATA4.to_json, source_id)
+    assert_equal 2, TrafficSpy::Payload.find_browsers(source_id).count
   end
 end

@@ -10,6 +10,7 @@ class SourceTest < FeatureTest
   def test_add_creates_if_unique
     TrafficSpy::Source.add("jumpstartlab", "jumpstartlab.com")
     assert_equal 1, TrafficSpy::Source.table.count
+    # require 'pry' ; binding.pry
     TrafficSpy::Source.add("jumpstartlab", "jumpstartlab.com")
     TrafficSpy::Source.add("turing", "turing.com")
     assert_equal 2, TrafficSpy::Source.table.count

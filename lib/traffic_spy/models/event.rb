@@ -13,7 +13,11 @@ module TrafficSpy
     end
 
     def self.add(event)
-      create(event) if not_created?(event)
+      if not_created?(event)
+        create(event)
+      else
+        self.find(event).id
+      end
     end
 
     def self.create(event)

@@ -1,8 +1,90 @@
-<h1>Hello, <%= :identifier %></h1>
+<h1>Aggregate Source Data for <%= identifier %></h1>
 
-<table>
-  <tr><td colspan=2>Most visited URLs</td></tr>
-  <% urls.each do |url| %>
-  <tr><td><%= url[:url] %></td></tr>
-  <% end  %>
-</table>
+<div id="accordion" class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Most visited URLs</a>
+      </h4>
+    </div>
+
+    <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td>Times Visited</td>
+              <td>URL</td>
+            </tr>
+          </thead>
+          <tbody>
+            <% urls.each_with_index do |url, index| %>
+            <tr>
+              <td><%= url[:count] %></td>
+              <td><a href="/<%= identifier %>/urls<%= url[:url] %>"><%= url[:url] %></a></td>
+            </tr>
+            <% end  %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Web Browser Breakdown</a>
+      </h4>
+    </div>
+
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td>Percentage Used</td>
+              <td>Browser</td>
+            </tr>
+          </thead>
+          <tbody>
+            <% browsers.each_with_index do |browser, index| %>
+            <tr>
+              <td><%= browser[:count] %></td>
+              <td><%= browser[:browser] %></td>
+            </tr>
+            <% end  %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Operating System Breakdown</a>
+      </h4>
+    </div>
+
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td>Percentage Used</td>
+              <td>OS</td>
+            </tr>
+          </thead>
+          <tbody>
+            <% os.each_with_index do |os, index| %>
+            <tr>
+              <td><%= os[:count] %></td>
+              <td><%= os[:os] %></td>
+            </tr>
+            <% end  %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

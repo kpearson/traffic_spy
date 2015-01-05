@@ -19,7 +19,7 @@ class UserAgentTest < FeatureTest
   def test_find_all_by_browser
     TrafficSpy::UserAgent.create(Payload::DATA1["userAgent"])
     TrafficSpy::UserAgent.create(Payload::DATA2["userAgent"])
-    assert_equal 2, TrafficSpy::UserAgent.find_all_by_browser("Chrome").count
+    assert_equal 2, TrafficSpy::UserAgent.table.count
   end
 
   def test_agent_parser

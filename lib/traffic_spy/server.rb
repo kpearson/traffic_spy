@@ -42,8 +42,38 @@ module TrafficSpy
     get '/sources/:identifier' do |identifier|
       raise Forbidden, " Application not registered." unless
         Source.find(identifier)
-      erb :source, locals: { urls: TrafficSpy::SourceView.find_urls(identifier) }
+      erb :source, locals: { identifier:  identifier,
+                             urls:        TrafficSpy::SourceView.find_urls(identifier),
+                             browsers:    TrafficSpy::SourceView.find_browsers(identifier),
+                             os:          TrafficSpy::SourceView.find_all_os(identifier)#,
+                            #  resolutions: TrafficSpy::SourceView.find_resolutions(identifier)
+                           }
     end
+
+    get '/sources/:identifier/urls/*' do |identifier|
+        #raise Forbidden, "The URL has not been requested." unless
+        # URL.find(params[:identifier])
+        # source = Source.find(params[:identifier])
+        @url = "/"+ params[:splat].join("/")
+        if URL.exists?(@url)
+
+            shortest_response_time = URL.shortest_response_time(source, @url)
+            average_response_time  = URL.average_response_time(source, @url)
+            http_verbs             = URL.http_verbs(source, @url)
+            popular_referrers      = URL.popular_referrers(source, @url)
+            popular_user_agents    = URL.popular_user_agents(source, @url)
+            erb :urls, locals: { identifier: identifier,
+                                 longest_response_time: TrafficSpy::URLsView.longest_response_time(identifier, url),
+                                 shortest_response_time: shortest_response_time,
+                                 average_response_time: average_response_time,
+                                 http_verbs: http_verbs,
+                                 popular_referrers: popular_referrers,
+                                 popular_user_agents: popular_user_agents}
+            # else
+            #   # @message = "The url #{@url} has never been requested"
+            #   erb :error
+        end
+     end
 
     get '/sources/:identifier/events' do |identifier|
       "what up"
