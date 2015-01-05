@@ -1,7 +1,7 @@
 module TrafficSpy
   class Source
     attr_reader :id, :identifier, :root_url
-    
+
     def initialize(attributes)
       @id         = attributes[:id]
       @identifier = attributes[:identifier]
@@ -20,7 +20,6 @@ module TrafficSpy
       table.where(identifier: identifier).first
       # Source.new(row)
     end
-
 
     def self.create(identifier, root_url)
       begin

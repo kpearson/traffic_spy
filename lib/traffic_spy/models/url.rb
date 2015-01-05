@@ -5,7 +5,7 @@ module TrafficSpy
 
     def initialize(attribute)
       @id = attribute[:id]
-      @url = attribute[:url]
+      @url = URI(attribute[:url]).path# URI(params["url"]).path
     end
 
     def self.table
@@ -28,13 +28,13 @@ module TrafficSpy
 
     def self.find(url)
       row = table.where(url: url).first
-      URL.new(row)
+      URL.new(row) if row
     end
 
     def self.longest_response_time(source, url)
       url_id = URL.find(url).id
       DB.from(:payloads)
-      .where(:source_id => source[:id])
+      .where(:source_id => source)
       .where(:url_id => url_id)
       .max(:responded_in)
     end

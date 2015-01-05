@@ -22,7 +22,7 @@ class URLTest < FeatureTest
   end
 
   def test_can_find_longest_response_time
-    source = "jumpstartlabs"
+    source = TrafficSpy::Source.create("jumpstartlab", "jumpstartlab.com")
     url = "/about"
     TrafficSpy::URL.add(Payload::DATA4["url"])
     TrafficSpy::URL.add(Payload::DATA2["url"])

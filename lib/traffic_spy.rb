@@ -45,8 +45,9 @@ module TrafficSpy
 
   class URLsView
     def self.longest_response_time(identifier, url)
-      source = TrafficSpy::Source.find(identifier)
-      TrafficSpy::URL.longest_response_time(source, url)
+      require 'pry' ; binding.pry
+      # source_id = TrafficSpy::Source.find(identifier)
+      TrafficSpy::URL.longest_response_time(identifier, url)
     end
   end
 end
